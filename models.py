@@ -3,11 +3,19 @@ from sqlalchemy.orm import relationship
 
 from .database import Base
 
+class User(Base):
+    __tablename__ = "users"
 
-class ApplicationsBase(Base):
+    user_id = Column(Integer, primary_key=True)
+    email = Column(String, unique=True, index = True)
+    hashed_password = Column(String)
+    is_active = Column(Boolean, default=True)
+
+    applications = relationship("Application", back_populates = "user")
+class Application(Base):
     __tablename__ = "apps"
 
-    id = Column(Integer, primary_key=True)
+    app_id = Column(Integer, primary_key=True)
     link = Column(String)
     company = Column(String)
     role = Column(String)
@@ -16,12 +24,7 @@ class ApplicationsBase(Base):
     industry = Column(String)
     location = Column(String)
     application_platform = Column(String)
-    
-class ApplicationsCreate(ApplicationsBase):
-    pass
+    user_id = Column(Integer, ForeignKey("users.id"))
 
-class Application(ApplicationsBase):
-    id : int
+    user = relationship("User", back_populates = "applications")
     
-    class Config:
-        orm_mode = True

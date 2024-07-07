@@ -9,4 +9,27 @@ class ApplicationBase(BaseModel):
     industry : str
     location : str
     application_platform : str
-    
+
+class ApplicationCreate(ApplicationBase):
+    pass
+
+class Application(ApplicationBase):
+    app_id : int
+    user_id : int
+    class Config:
+        orm_mode = True  
+
+class UserBase(BaseModel):
+    email : str
+
+class UserCreate(UserBase):
+    password : str
+
+class User(UserBase):
+    id : int
+    is_active : bool
+    applications : list[Application] = []
+
+    class Config:
+        orm_mode = True
+
